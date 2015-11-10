@@ -62,7 +62,9 @@
                             <constraint firstItem="ofL-Ly-NwX" firstAttribute="top" secondItem="guM-Qc-24X" secondAttribute="bottom" id="emG-kB-nDY"/>
                             <constraint firstAttribute="trailing" secondItem="ofL-Ly-NwX" secondAttribute="trailing" id="rfc-8W-pFJ"/>
                             <constraint firstItem="ofL-Ly-NwX" firstAttribute="leading" secondItem="guM-Qc-24X" secondAttribute="leading" id="zM2-gB-UHO"/>
-                            <constraint firstItem="guM-Qc-24X" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="zyO-kq-V35"/>
+                            <constraint firstItem="guM-Qc-24X" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="zyO-kq-V35">
+                                <variation key="widthClass=compact" constant="20"/>
+                            </constraint>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
