@@ -104,10 +104,10 @@
 			};
 			buildConfigurationList = 1F6642571BF2112A00E996A4 /* Build configuration list for PBXProject "FamilyNavi Düsseldorf" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = German;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				en,
+				de,
 				Base,
 			);
 			mainGroup = 1F6642531BF2112A00E996A4;
