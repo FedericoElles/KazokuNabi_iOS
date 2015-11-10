@@ -27,20 +27,60 @@
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="p1h-O7-2ks"/>
                                     <barButtonItem title="Vor" width="60" id="KSY-Qp-bhm"/>
                                 </items>
+                                <variation key="heightClass=regular" fixedFrame="YES">
+                                    <rect key="frame" x="0.0" y="756" width="600" height="44"/>
+                                </variation>
                             </toolbar>
                             <webView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="guM-Qc-24X">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="556"/>
                                 <animations/>
                                 <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="deviceRGB"/>
+                                <variation key="heightClass=regular" fixedFrame="YES">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="756"/>
+                                </variation>
                             </webView>
                         </subviews>
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="guM-Qc-24X" firstAttribute="trailing" secondItem="ofL-Ly-NwX" secondAttribute="trailing" id="8cL-k5-0xq"/>
+                            <constraint firstItem="ofL-Ly-NwX" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="IPj-Ck-6Fs"/>
+                            <constraint firstItem="ofL-Ly-NwX" firstAttribute="bottom" secondItem="wfy-db-euE" secondAttribute="top" id="W23-Hc-POD"/>
+                            <constraint firstItem="ofL-Ly-NwX" firstAttribute="top" secondItem="guM-Qc-24X" secondAttribute="bottom" id="emG-kB-nDY"/>
+                            <constraint firstAttribute="trailing" secondItem="ofL-Ly-NwX" secondAttribute="trailing" id="rfc-8W-pFJ"/>
+                            <constraint firstItem="ofL-Ly-NwX" firstAttribute="leading" secondItem="guM-Qc-24X" secondAttribute="leading" id="zM2-gB-UHO"/>
+                            <constraint firstItem="guM-Qc-24X" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="zyO-kq-V35"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="8cL-k5-0xq"/>
+                                <exclude reference="zyO-kq-V35"/>
+                                <exclude reference="IPj-Ck-6Fs"/>
+                                <exclude reference="W23-Hc-POD"/>
+                                <exclude reference="emG-kB-nDY"/>
+                                <exclude reference="rfc-8W-pFJ"/>
+                                <exclude reference="zM2-gB-UHO"/>
+                            </mask>
+                        </variation>
+                        <variation key="widthClass=compact">
+                            <mask key="constraints">
+                                <include reference="8cL-k5-0xq"/>
+                                <include reference="zyO-kq-V35"/>
+                                <include reference="IPj-Ck-6Fs"/>
+                                <include reference="W23-Hc-POD"/>
+                                <include reference="emG-kB-nDY"/>
+                                <include reference="rfc-8W-pFJ"/>
+                                <include reference="zM2-gB-UHO"/>
+                            </mask>
+                        </variation>
                     </view>
+                    <connections>
+                        <outlet property="webview" destination="guM-Qc-24X" id="aES-8t-f5O"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="305" y="429"/>
+            <point key="canvasLocation" x="304.5" y="429"/>
         </scene>
     </scenes>
 </document>
