@@ -9,8 +9,11 @@
 import UIKit
 
 class ViewController: UIViewController {
+    
+    
 
     @IBOutlet weak var webview: UIWebView!
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,6 +23,20 @@ class ViewController: UIViewController {
         //let url = NSURL (string: "http://www.apple.com");
         let requestObj = NSURLRequest(URL: url!);
         webview.loadRequest(requestObj);
+    }
+    
+    @IBAction func back(sender: UIBarButtonItem) {
+        webview.goBack()
+    }
+    
+    @IBAction func forward(sender: UIBarButtonItem) {
+        webview.goForward()
+    }
+    
+    @IBAction func home(sender: UIBarButtonItem) {
+        let url = NSBundle.mainBundle().URLForResource("index", withExtension:"html", subdirectory: "html")
+        let request = NSURLRequest(URL:url!)
+        webview.loadRequest(request)
     }
 
     override func didReceiveMemoryWarning() {
