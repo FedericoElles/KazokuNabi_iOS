@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1F233F241BF21C6400A3D30E /* html in Resources */ = {isa = PBXBuildFile; fileRef = 1F233F231BF21C6400A3D30E /* html */; };
+		1F46A9251BF3CBBD00BCE8A3 /* location-home.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 1F46A9241BF3CBBD00BCE8A3 /* location-home.gpx */; };
 		1F6642601BF2112A00E996A4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F66425F1BF2112A00E996A4 /* AppDelegate.swift */; };
 		1F6642621BF2112A00E996A4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F6642611BF2112A00E996A4 /* ViewController.swift */; };
 		1F6642651BF2112A00E996A4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1F6642631BF2112A00E996A4 /* Main.storyboard */; };
@@ -17,6 +18,7 @@
 
 /* Begin PBXFileReference section */
 		1F233F231BF21C6400A3D30E /* html */ = {isa = PBXFileReference; lastKnownFileType = folder; name = html; path = html/html; sourceTree = "<group>"; };
+		1F46A9241BF3CBBD00BCE8A3 /* location-home.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "location-home.gpx"; sourceTree = "<group>"; };
 		1F66425C1BF2112A00E996A4 /* FamilyNavi Düsseldorf.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FamilyNavi Düsseldorf.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F66425F1BF2112A00E996A4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1F6642611BF2112A00E996A4 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -40,6 +42,7 @@
 		1F6642531BF2112A00E996A4 = {
 			isa = PBXGroup;
 			children = (
+				1F46A9241BF3CBBD00BCE8A3 /* location-home.gpx */,
 				1F66425E1BF2112A00E996A4 /* FamilyNavi Düsseldorf */,
 				1F66425D1BF2112A00E996A4 /* Products */,
 			);
@@ -127,6 +130,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1F66426A1BF2112A00E996A4 /* Assets.xcassets in Resources */,
+				1F46A9251BF3CBBD00BCE8A3 /* location-home.gpx in Resources */,
 				1F6642651BF2112A00E996A4 /* Main.storyboard in Resources */,
 				1F233F241BF21C6400A3D30E /* html in Resources */,
 			);

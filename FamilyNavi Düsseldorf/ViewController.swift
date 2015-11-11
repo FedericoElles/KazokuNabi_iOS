@@ -21,6 +21,7 @@ class ViewController: UIViewController, UIWebViewDelegate, CLLocationManagerDele
     var jsReady:Bool = false //if webview ready
     var jsBacklog = [String]() //if gps data faster than webview, store commands here
     var geoInitData:Bool = true //if gps data arrives first time
+    var geoLastLocation = CLLocation(latitude: 0, longitude: 0)
 
 
     //execute JS command in webview
@@ -106,14 +107,29 @@ class ViewController: UIViewController, UIWebViewDelegate, CLLocationManagerDele
     //GEOLOCATION
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let location = locations.last! as CLLocation
+        var sendLocation = true
         
+        //if lsat location, get distance
+        if self.geoLastLocation.coordinate.longitude != 0 &&
+           self.geoLastLocation.coordinate.latitude != 0 {
+            let distance = self.geoLastLocation.distanceFromLocation(location)
+            print("Distance \(distance)")
+            if distance < 10 {
+                sendLocation = false
+            }
+        }
         
-        let action = self.geoInitData ? "positionInitial" : "positionUpdate"
-        self.geoInitData = false
-        let lng = "\(location.coordinate.longitude)"
-        let lat = "\(location.coordinate.latitude)"
-        let command = "window._sendLocationData('\(action)', \(lat), \(lng))"
-        jsExec(command)
+        //save last location
+        self.geoLastLocation = CLLocation(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+        
+        if sendLocation {
+            let action = self.geoInitData ? "positionInitial" : "positionUpdate"
+            self.geoInitData = false
+            let lng = "\(location.coordinate.longitude)"
+            let lat = "\(location.coordinate.latitude)"
+            let command = "window._sendLocationData('\(action)', \(lat), \(lng))"
+            jsExec(command)
+        }
         
         
 
@@ -154,7 +170,8 @@ class ViewController: UIViewController, UIWebViewDelegate, CLLocationManagerDele
     func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
         print("Error while updating location " + error.localizedDescription)
         let command = "window._sendLocationData('positionUnavailable')"
-        jsExec(command)    }
+        jsExec(command)
+    }
     
     //BUTTONS
     
