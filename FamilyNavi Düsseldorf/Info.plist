@@ -38,5 +38,10 @@
 	</array>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Wir nutzen Deine Position um relevante Orte in Deiner Nähe anzuzeigen.</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
 </dict>
 </plist>

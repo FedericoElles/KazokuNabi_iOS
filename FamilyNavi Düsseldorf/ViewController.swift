@@ -12,29 +12,25 @@ import CoreLocation
 class ViewController: UIViewController, UIWebViewDelegate, CLLocationManagerDelegate {
     
     
-    func delay(delay:Double, closure:()->()) {
-        dispatch_after(
-            dispatch_time(
-                DISPATCH_TIME_NOW,
-                Int64(delay * Double(NSEC_PER_SEC))
-            ),
-            dispatch_get_main_queue(), closure)
-    }
-    
     let locationManager = CLLocationManager()
     
     
     @IBOutlet weak var webview: UIWebView!
     
-    func loadPage(){
+    
+    var jsReady:Bool = false //if webview ready
+    var jsBacklog = [String]() //if gps data faster than webview, store commands here
+    var geoInitData:Bool = true //if gps data arrives first time
 
-        
-        //let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(1 * Double(NSEC_PER_SEC)))
-        delay(3.0) {
-            // do stuff
 
+    //execute JS command in webview
+    func jsExec(command:String){
+        if jsReady {
+            print(command)
+            self.webview.stringByEvaluatingJavaScriptFromString(command)
+        } else {
+            jsBacklog.append(command)
         }
-
     }
 
     
@@ -73,24 +69,27 @@ class ViewController: UIViewController, UIWebViewDelegate, CLLocationManagerDele
     func webView(webView: UIWebView, shouldStartLoadWithRequest request: NSURLRequest, navigationType: UIWebViewNavigationType) -> Bool {
         let url = request.URL
         let str = "\(url!)"
+        print("open URL: \(url!)")
         let urlArray = str.characters.split{$0 == ":"}.map(String.init)
         if urlArray[0] == "swift" {
             if urlArray[1] == "//ready" {
                 print("javascript:ready")
-                //let result = self.webview.stringByEvaluatingJavaScriptFromString("window._sendLocationData('positionInitial', 51.249, 6.77576)")
-                //print(result)
+                self.jsReady = true
+                if self.jsBacklog.count > 0 {
+                    for command in self.jsBacklog {
+                        jsExec(command)
+                    }
+                }
             }
             
+            return false
+        } else if urlArray[0] == "https" || urlArray[0] == "http" {
             //if external link, open in Safari
             //via http://stackoverflow.com/questions/2532453/force-a-webview-link-to-launch-safari/30648750#30648750
-            if navigationType == UIWebViewNavigationType.LinkClicked {
-                UIApplication.sharedApplication().openURL(request.URL!)
-                return false
-            } else {
-                return true
-            }
-            
-            //return false
+
+            UIApplication.sharedApplication().openURL(request.URL!)
+            return false
+
         } else {
             return true
         }
@@ -102,12 +101,13 @@ class ViewController: UIViewController, UIWebViewDelegate, CLLocationManagerDele
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let location = locations.last! as CLLocation
         
-        let action = locations.count == 1 ? "positionInitial" : "positionUpdate"
+        
+        let action = self.geoInitData ? "positionInitial" : "positionUpdate"
+        self.geoInitData = false
         let lng = "\(location.coordinate.longitude)"
         let lat = "\(location.coordinate.latitude)"
         let command = "window._sendLocationData('\(action)', \(lat), \(lng))"
-        print (command)
-        self.webview.stringByEvaluatingJavaScriptFromString(command)
+        jsExec(command)
         
         
 
@@ -140,8 +140,7 @@ class ViewController: UIViewController, UIWebViewDelegate, CLLocationManagerDele
             let country = (containsPlacemark.country != nil) ? containsPlacemark.country : ""
             
             let command = "window._sendLocationData('placeUpdate', '\(country!)', '\(locality!)', '\(street!)')"
-            print(command)
-            self.webview.stringByEvaluatingJavaScriptFromString(command)
+            jsExec(command)
         }
         
     }
@@ -149,9 +148,7 @@ class ViewController: UIViewController, UIWebViewDelegate, CLLocationManagerDele
     func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
         print("Error while updating location " + error.localizedDescription)
         let command = "window._sendLocationData('positionUnavailable')"
-        print(command)
-        self.webview.stringByEvaluatingJavaScriptFromString(command)
-    }
+        jsExec(command)    }
     
     //BUTTONS
     
@@ -164,7 +161,7 @@ class ViewController: UIViewController, UIWebViewDelegate, CLLocationManagerDele
     }
     
     @IBAction func home(sender: UIBarButtonItem) {
-         self.webview.stringByEvaluatingJavaScriptFromString("window._goHome()")
+         jsExec("window._goHome()")
     }
 
     override func didReceiveMemoryWarning() {
