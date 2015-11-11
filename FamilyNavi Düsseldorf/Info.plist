@@ -36,5 +36,7 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Wir nutzen Deine Position um relevante Orte in Deiner Nähe anzuzeigen.</string>
 </dict>
 </plist>

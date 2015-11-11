@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import CoreLocation
 
-class ViewController: UIViewController, UIWebViewDelegate {
+class ViewController: UIViewController, UIWebViewDelegate, CLLocationManagerDelegate {
     
     
     func delay(delay:Double, closure:()->()) {
@@ -19,6 +20,8 @@ class ViewController: UIViewController, UIWebViewDelegate {
             ),
             dispatch_get_main_queue(), closure)
     }
+    
+    let locationManager = CLLocationManager()
     
     
     @IBOutlet weak var webview: UIWebView!
@@ -42,6 +45,13 @@ class ViewController: UIViewController, UIWebViewDelegate {
         webview.scrollView.bounces = false
         
         webview.delegate = self
+        
+        //GEOLOCATION
+        locationManager.delegate = self
+        locationManager.desiredAccuracy =  kCLLocationAccuracyNearestTenMeters
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.startUpdatingLocation()
+        
         
         // Do any additional setup after loading the view, typically from a nib.
         let url = NSBundle.mainBundle().URLForResource("index", withExtension:"html", subdirectory: "html")
@@ -67,13 +77,80 @@ class ViewController: UIViewController, UIWebViewDelegate {
         if urlArray[0] == "swift" {
             if urlArray[1] == "//ready" {
                 print("javascript:ready")
-                let result = self.webview.stringByEvaluatingJavaScriptFromString("window._sendLocationData('positionInitial', 51.249, 6.77576)")
-                print(result)
+                //let result = self.webview.stringByEvaluatingJavaScriptFromString("window._sendLocationData('positionInitial', 51.249, 6.77576)")
+                //print(result)
             }
-            return false
+            
+            //if external link, open in Safari
+            //via http://stackoverflow.com/questions/2532453/force-a-webview-link-to-launch-safari/30648750#30648750
+            if navigationType == UIWebViewNavigationType.LinkClicked {
+                UIApplication.sharedApplication().openURL(request.URL!)
+                return false
+            } else {
+                return true
+            }
+            
+            //return false
         } else {
             return true
         }
+    }
+    
+    
+    
+    //GEOLOCATION
+    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        let location = locations.last! as CLLocation
+        
+        let action = locations.count == 1 ? "positionInitial" : "positionUpdate"
+        let lng = "\(location.coordinate.longitude)"
+        let lat = "\(location.coordinate.latitude)"
+        let command = "window._sendLocationData('\(action)', \(lat), \(lng))"
+        print (command)
+        self.webview.stringByEvaluatingJavaScriptFromString(command)
+        
+        
+
+        
+        CLGeocoder().reverseGeocodeLocation(manager.location!, completionHandler: {(placemarks, error)->Void in
+            
+            if (error != nil) {
+                print("Reverse geocoder failed with error" + error!.localizedDescription)
+                return
+            }
+            
+            if placemarks!.count > 0 {
+                let pm = placemarks![0] 
+                self.displayLocationInfo(pm)
+            } else {
+                print("Problem with the data received from geocoder")
+            }
+        })
+    }
+    
+    
+    func displayLocationInfo(placemark: CLPlacemark?) {
+        if let containsPlacemark = placemark {
+            //stop updating location to save battery life
+            locationManager.stopUpdatingLocation()
+            let locality = (containsPlacemark.locality != nil) ? containsPlacemark.locality : ""
+            //let postalCode = (containsPlacemark.postalCode != nil) ? containsPlacemark.postalCode : ""
+            //let administrativeArea = (containsPlacemark.administrativeArea != nil) ? containsPlacemark.administrativeArea : ""
+            let street = (containsPlacemark.thoroughfare != nil) ? containsPlacemark.thoroughfare : ""
+            let country = (containsPlacemark.country != nil) ? containsPlacemark.country : ""
+            
+            let command = "window._sendLocationData('placeUpdate', '\(country!)', '\(locality!)', '\(street!)')"
+            print(command)
+            self.webview.stringByEvaluatingJavaScriptFromString(command)
+        }
+        
+    }
+    
+    func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
+        print("Error while updating location " + error.localizedDescription)
+        let command = "window._sendLocationData('positionUnavailable')"
+        print(command)
+        self.webview.stringByEvaluatingJavaScriptFromString(command)
     }
     
     //BUTTONS
