@@ -15,6 +15,8 @@ class ViewController: UIViewController, UIWebViewDelegate, CLLocationManagerDele
     let locationManager = CLLocationManager()
     
     
+    @IBOutlet weak var homeButton: UIBarButtonItem!
+    @IBOutlet weak var backButton: UIBarButtonItem!
     @IBOutlet weak var webview: UIWebView!
     
     
@@ -23,6 +25,34 @@ class ViewController: UIViewController, UIWebViewDelegate, CLLocationManagerDele
     var geoInitData:Bool = true //if gps data arrives first time
     var geoLastLocation = CLLocation(latitude: 0, longitude: 0)
 
+    
+    //update Button status
+    func updateButtons(){
+        self.backButton.enabled = self.webview.canGoBack;
+
+        let command = "window.location.hash"
+        let hash = self.webview.stringByEvaluatingJavaScriptFromString(command)!
+        if hash == "" || hash == "#main" {
+            self.homeButton.enabled = false
+        } else {
+            self.homeButton.enabled = true
+        }
+
+        print("Current URL\(hash)")
+
+        
+    }
+    
+    //delay execution
+    func delay(delay:Double, closure:()->()) {
+        dispatch_after(
+            dispatch_time(
+                DISPATCH_TIME_NOW,
+                Int64(delay * Double(NSEC_PER_SEC))
+            ),
+            dispatch_get_main_queue(), closure)
+    }
+    
 
     //execute JS command in webview
     func jsExec(command:String){
@@ -37,6 +67,9 @@ class ViewController: UIViewController, UIWebViewDelegate, CLLocationManagerDele
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.backButton.enabled = false
+        self.homeButton.enabled = false
         
         // disable scroll out of edge
         webview.scrollView.bounces = false
@@ -71,6 +104,7 @@ class ViewController: UIViewController, UIWebViewDelegate, CLLocationManagerDele
     func webViewDidFinishLoad(webView: UIWebView)
     {
         print("ViewDidStopLoad")
+        updateButtons()
     }
     
     func webView(webView: UIWebView, shouldStartLoadWithRequest request: NSURLRequest, navigationType: UIWebViewNavigationType) -> Bool {
@@ -98,6 +132,9 @@ class ViewController: UIViewController, UIWebViewDelegate, CLLocationManagerDele
             return false
 
         } else {
+            delay(0.3) {
+                self.updateButtons()
+            }
             return true
         }
     }
@@ -177,6 +214,9 @@ class ViewController: UIViewController, UIWebViewDelegate, CLLocationManagerDele
     
     @IBAction func back(sender: UIBarButtonItem) {
         webview.goBack()
+        delay(0.3) {
+            self.updateButtons()
+        }
     }
     
     //@IBAction func forward(sender: UIBarButtonItem) {

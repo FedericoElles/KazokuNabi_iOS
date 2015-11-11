@@ -89,6 +89,8 @@
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
                     <connections>
+                        <outlet property="backButton" destination="arx-eF-6Pl" id="xzM-oO-Hd5"/>
+                        <outlet property="homeButton" destination="deS-vJ-nkj" id="Cd3-8Q-unr"/>
                         <outlet property="webview" destination="guM-Qc-24X" id="aES-8t-f5O"/>
                     </connections>
                 </viewController>
