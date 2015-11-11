@@ -87,9 +87,7 @@ class ViewController: UIViewController, UIWebViewDelegate {
     }
     
     @IBAction func home(sender: UIBarButtonItem) {
-        let url = NSBundle.mainBundle().URLForResource("index", withExtension:"html", subdirectory: "html")
-        let request = NSURLRequest(URL:url!)
-        webview.loadRequest(request)
+         self.webview.stringByEvaluatingJavaScriptFromString("window._goHome()")
     }
 
     override func didReceiveMemoryWarning() {
